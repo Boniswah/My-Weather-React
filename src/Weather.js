@@ -1,8 +1,19 @@
-import React from "react";
+import React, {useState} from "react";
+import axios from "axios";
 import "./Weather.css"; 
 
 export default function Weather() {
-    return (
+  const [ready, setReady] = useState(false);
+  const [temperature, setTemperature] = useState(null);
+function handleResponse(response){
+  console.log(response.data);
+  setTemperature (response.data.main.temp);
+  setReady(true);
+
+}
+
+if (ready){
+  return (
       <div className="weather">
         <form>
           <div className="row">
@@ -23,7 +34,7 @@ export default function Weather() {
             </div>
           </div>
         </form>
-        <h1>Kakamas</h1>
+        <h1>Pretoria</h1>
         <ul>
           <li>Friday 08:00</li>
           <li>Sunny</li>
@@ -36,7 +47,7 @@ export default function Weather() {
                 alt="Sunny"
               />
               <div className="float-left">
-                <span className="temperature">29</span>
+                <span className="temperature">{temperature}</span>
                 <span className="unit">°C</span>
               </div>
             </div>
@@ -51,4 +62,17 @@ export default function Weather() {
         </div>
       </div>
     );
+
+} else{
+  const apiKey = "febb10a9ted73c64aff21fo10d593bdc";
+  let city = "Pretoria";
+  let apiUrl =
+    "https://api.shecodes.io/weather/v1/current?query=${city}&key=${apiKey}&units=metric";
+    axios.get(apiUrl).then(handleResponse);
+  
+    return "Loading...";
+
+}
+
+    
 }
